@@ -1,0 +1,463 @@
+!!com.appdynamics.cloud.modern.config.SetupConfig
+
+description: "AD-Modernization-Workshop"
+teardownFilePath: "./scripts/state/workshop-teardown.yaml"
+setupHomeDirectory: "./"
+setupStateDirectory: "./scripts/state"
+setupStepsFileName: "appd_workshop_setup.txt"
+cloudProvider: "aws"
+debugLogging: false
+
+
+# if machine agents are deployed, their ids must be collected
+# before the applications are stopped
+teardownScript: "./scripts/terminate_applications.sh"
+
+
+taskExecutionOrder:
+  - taskType: "SHELL_TASK"
+    taskName: "workshop-prereqs-sh"
+  - taskType: "SHELL_TASK"
+    taskName: "deploy-db-agent"
+  - taskType: "SHELL_TASK"
+    taskName: "create-dbagent-srvc-sh"   
+  - taskType: "SHELL_TASK"
+    taskName: "create-pre-mod-srvc-sh"
+  - taskType: "CONTROLLER_TASKS"
+    taskName: ""
+  - taskType: "SHELL_TASK"
+    taskName: "start-pre-mod-app"
+
+
+    
+shellTasks:
+  - taskType: "SHELL_TASK_EXECUTE_SHELL_SCRIPT"
+    taskName: "workshop-prereqs-sh"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_FILEPATH]"
+        tagValue: "./scripts/install_al2_workshop_prerequisites.sh"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_BEGIN_MSG]"
+        tagValue: " - Start installing workshop prerequisite software"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_END_MSG]"
+        tagValue: " - Finished installing workshop prerequisite software"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_INHERIT_IO]"
+        tagValue: "true"
+
+  - taskType: "SHELL_TASK_DEPLOY_DB_AGENT"
+    taskName: "deploy-db-agent"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_DB_AGENT_HOME_DIR]"
+        tagValue: "/opt/appdynamics/dbagent"
+      - tagKey: "@[ADWRKSHP_DB_AGENT_ZIP_URL]"
+        tagValue: "https://download-files.appdynamics.com/download-file/db-agent/23.2.0.3027/db-agent-23.2.0.3027.zip"
+       #tagValue: "https://download-files.appdynamics.com/download-file/db-agent/22.3.0.2742/db-agent-22.3.0.2742.zip"
+      - tagKey: "@[ADWRKSHP_DB_AGENT_NAME]"
+        tagValue: "adfin-mod-@[ADWRKSHP_LABUSER_KEY]-DBAgent"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_BEGIN_MSG]"
+        tagValue: " - Start deployment of database agent"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_END_MSG]"
+        tagValue: " - Finished deployment of database agent"
+
+
+  - taskType: "SHELL_TASK_EXECUTE_SHELL_SCRIPT"
+    taskName: "create-dbagent-srvc-sh"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_FILEPATH]"
+        tagValue: "./scripts/create_dbagent_srvc_sudo.sh"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_BEGIN_MSG]"
+        tagValue: " - Starting service entry creation for database agent"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_END_MSG]"
+        tagValue: " - Finished service entry creation for database agent"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_INHERIT_IO]"
+        tagValue: "false"
+
+  - taskType: "SHELL_TASK_EXECUTE_SHELL_SCRIPT"
+    taskName: "create-pre-mod-srvc-sh"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_FILEPATH]"
+        tagValue: "./scripts/create_pre_app_srvc_sudo.sh"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_BEGIN_MSG]"
+        tagValue: " - Starting service entry creation for pre-modernization application"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_END_MSG]"
+        tagValue: " - Finished service entry creation for pre-modernization application"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_INHERIT_IO]"
+        tagValue: "false"
+
+  - taskType: "SHELL_TASK_EXECUTE_SHELL_SCRIPT"
+    taskName: "start-pre-mod-app"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_FILEPATH]"
+        tagValue: "./applications/pre-modernization/start_app.sh"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_BEGIN_MSG]"
+        tagValue: " - Starting deployment of pre-modernization application"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_END_MSG]"
+        tagValue: " - Finished deployment of pre-modernization application"
+      - tagKey: "@[ADWRKSHP_SHELL_SCRIPT_INHERIT_IO]"
+        tagValue: "true"
+
+
+      
+templates:
+  - templateName: "pre-mod-app-conf"
+    sourceFile: "./applications/pre-modernization/application.env.template"
+    destinationFile: "./applications/pre-modernization/.env/application.env"
+    tags:
+      - tagKey: "${ADWRKSHP_CONTROLLER_HOST}"
+        tagValue: "@[ADWRKSHP_CONTROLLER_HOST]"
+        
+      - tagKey: "${ADWRKSHP_CONTROLLER_ACCT_NAME}"
+        tagValue: "@[ADWRKSHP_CONTROLLER_ACCT_NAME]"
+                
+      - tagKey: "${ADWRKSHP_ACCT_ACCESS_KEY}"
+        tagValue: "@[ADWRKSHP_ACCT_ACCESS_KEY]"
+
+      - tagKey: "${ADWRKSHP_APM_APP_NAME}"
+        tagValue: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+        
+      - tagKey: "${ADWRKSHP_EUM_APP_NAME}"
+        tagValue: "@[ADWRKSHP_EUM_APP_NAME_PRE]"
+        
+      - tagKey: "${ADWRKSHP_EUM_APP_KEY}"
+        tagValue: "@[ADWRKSHP_EUM_APP_KEY_PRE]"
+        
+      - tagKey: "${ADWRKSHP_DB_AGENT_NAME}"
+        tagValue: "adfin-mod-@[ADWRKSHP_LABUSER_KEY]-DBAgent"
+        
+      - tagKey: "${ADWRKSHP_LABUSER_KEY}"
+        tagValue: "@[ADWRKSHP_LABUSER_KEY]"
+        
+ 
+  - templateName: "pre-mod-app-conf-examp"
+    sourceFile: "./applications/pre-modernization/application.env.template"
+    destinationFile: "./applications/pre-modernization/application.env"
+    tags:
+      - tagKey: "${ADWRKSHP_CONTROLLER_HOST}"
+        tagValue: "@[ADWRKSHP_CONTROLLER_HOST]"
+        
+      - tagKey: "${ADWRKSHP_CONTROLLER_ACCT_NAME}"
+        tagValue: "@[ADWRKSHP_CONTROLLER_ACCT_NAME]"
+                
+      - tagKey: "${ADWRKSHP_ACCT_ACCESS_KEY}"
+        tagValue: "df4d049a-9f78-4e95-a8ad-9261a53a5954"
+
+      - tagKey: "${ADWRKSHP_APM_APP_NAME}"
+        tagValue: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+        
+      - tagKey: "${ADWRKSHP_EUM_APP_NAME}"
+        tagValue: "@[ADWRKSHP_EUM_APP_NAME_PRE]"
+        
+      - tagKey: "${ADWRKSHP_EUM_APP_KEY}"
+        tagValue: "@[ADWRKSHP_EUM_APP_KEY_PRE]"
+        
+      - tagKey: "${ADWRKSHP_DB_AGENT_NAME}"
+        tagValue: "adfin-mod-@[ADWRKSHP_LABUSER_KEY]-DBAgent"
+        
+      - tagKey: "${ADWRKSHP_LABUSER_KEY}"
+        tagValue: "@[ADWRKSHP_LABUSER_KEY]"
+    
+
+  - templateName: "workshop-user-details"
+    sourceFile: "./scripts/workshop-user-details.txt.template"
+    destinationFile: "./workshop-user-details.txt"
+    tags:
+      - tagKey: "${ADWRKSHP_CONTROLLER_HOST}"
+        tagValue: "@[ADWRKSHP_CONTROLLER_HOST]"
+        
+      - tagKey: "${ADWRKSHP_CONTROLLER_ACCT_NAME}"
+        tagValue: "@[ADWRKSHP_CONTROLLER_ACCT_NAME]"
+        
+      - tagKey: "${ADWRKSHP_LABUSER_KEY}"
+        tagValue: "@[ADWRKSHP_LABUSER_KEY]"
+        
+      - tagKey: "${ADWRKSHP_LABUSER_PWD}"
+        tagValue: "@[ADWRKSHP_LABUSER_PWD]"
+
+      - tagKey: "${ADWRKSHP_APM_APP_NAME_PRE}"
+        tagValue: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+
+      - tagKey: "${ADWRKSHP_EUM_APP_NAME_PRE}"
+        tagValue: "@[ADWRKSHP_EUM_APP_NAME_PRE]"
+
+
+controllerInitTasks:
+# !!! The license rule creation task should be the very first controller init task
+# NEW IBL L##ICENSE RULE TAG KEYS
+#  - taskType: "CONTROLLER_TASK_CREATE_IBL_LICENSE_RULE"
+#    taskName: "create-license-rule"
+#    inputTags:
+#      - tagKey: "@[ADWRKSHP_LICENSE_RULE_NAME]"
+#        tagValue: "adfin-mod-@[ADWRKSHP_LABUSER_KEY]-LicenseRule"
+#      - tagKey: "@[ADWRKSHP_IBL_LICENSE_RULE_ACCT_ID]"
+#        tagValue: "23458"
+#        #tagValue: "817"
+#      - tagKey: "@[ADWRKSHP_IBL_LICENSE_RULE_NBR_ENTR]"
+#        tagValue: "0"
+#      - tagKey: "@[ADWRKSHP_IBL_LICENSE_RULE_NBR_PREM]"
+#        tagValue: "50"
+        
+
+# !!! The license rule creation task should be the very first controller init task
+#  - taskType: "CONTROLLER_TASK_CREATE_LICENSE_RULE"
+#    taskName: "create-license-rule"
+#    inputTags:
+#      - tagKey: "@[ADWRKSHP_LICENSE_RULE_NAME]"
+#        tagValue: "@[ADWRKSHP_LABUSER_KEY]-LicenseRule"
+#      - tagKey: "@[ADWRKSHP_LICENSE_RULE_NBR_APM]"
+#        tagValue: "24"
+#      - tagKey: "@[ADWRKSHP_LICENSE_RULE_NBR_MA]"
+#        tagValue: "0"
+#      - tagKey: "@[ADWRKSHP_LICENSE_RULE_NBR_SIM]"
+#        tagValue: "4"
+#      - tagKey: "@[ADWRKSHP_LICENSE_RULE_NBR_NET]"
+#        tagValue: "4"
+
+
+controllerTasks:
+
+  - taskType: "CONTROLLER_TASK_CREATE_APM_APP"
+    taskName: "create-apm-app-pre"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+        tagValue: "adfin-pre-mod-@[ADWRKSHP_LABUSER_KEY]"
+        
+    templateTargets:        
+      - templateName: "pre-mod-app-conf"
+        targetTags:
+          - tagKey: "${ADWRKSHP_APM_APP_NAME}"
+            tagValue: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+
+      - templateName: "pre-mod-app-conf-examp"
+        targetTags:
+          - tagKey: "${ADWRKSHP_APM_APP_NAME}"
+            tagValue: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+            
+      - templateName: "workshop-user-details"
+        targetTags:
+          - tagKey: "${ADWRKSHP_APM_APP_NAME_PRE}"
+            tagValue: "@[ADWRKSHP_APM_APP_NAME_PRE]"    
+
+
+  - taskType: "CONTROLLER_TASK_CREATE_BRUM_APP"
+    taskName: "create-brum-app-pre"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_EUM_APP_NAME_PRE]"
+        tagValue: "adfin-pre-mod-@[ADWRKSHP_LABUSER_KEY]-web"
+      - tagKey: "@[ADWRKSHP_EUM_APP_CONF_UPDATE]"
+        tagValue: "true"
+      - tagKey: "@[ADWRKSHP_EUM_APP_CONF_SLOWT_TYPE]"
+        tagValue: "STATIC_MS"
+      - tagKey: "@[ADWRKSHP_EUM_APP_CONF_SLOWT_VAL]"
+        tagValue: "1800"
+      - tagKey: "@[ADWRKSHP_EUM_APP_CONF_VSLOWT_TYPE]"
+        tagValue: "STATIC_MS"
+      - tagKey: "@[ADWRKSHP_EUM_APP_CONF_VSLOWT_VAL]"
+        tagValue: "2600"
+  
+    templateTargets:
+      - templateName: "pre-mod-app-conf"
+        targetTags:
+          - tagKey: "${ADWRKSHP_EUM_APP_KEY}"
+            tagValue: "@[ADWRKSHP_EUM_APP_KEY_PRE]"  
+          - tagKey: "${ADWRKSHP_EUM_APP_NAME}"
+            tagValue: "@[ADWRKSHP_EUM_APP_NAME_PRE]"
+
+      - templateName: "pre-mod-app-conf-examp"
+        targetTags:
+          - tagKey: "${ADWRKSHP_EUM_APP_KEY}"
+            tagValue: "@[ADWRKSHP_EUM_APP_KEY_PRE]"  
+          - tagKey: "${ADWRKSHP_EUM_APP_NAME}"
+            tagValue: "@[ADWRKSHP_EUM_APP_NAME_PRE]"
+            
+      - templateName: "workshop-user-details"
+        targetTags:
+          - tagKey: "${ADWRKSHP_EUM_APP_NAME_PRE}"
+            tagValue: "@[ADWRKSHP_EUM_APP_NAME_PRE]"    
+
+ 
+  - taskType: "CONTROLLER_TASK_CREATE_DB_COLLECTOR"
+    taskName: "adfin-db-collector-pre"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_APM_APP_NAME]"
+        tagValue: "adfin-pre-mod-@[ADWRKSHP_LABUSER_KEY]"      
+      - tagKey: "@[ADWRKSHP_CLOUD_DB_INST_NAME]"
+        tagValue: "adfin-pre-mod-@[ADWRKSHP_LABUSER_KEY]-mysql"    
+      - tagKey: "@[ADWRKSHP_CLOUD_DB_INST_TYPE]"
+        tagValue: "MYSQL"    
+      - tagKey: "@[ADWRKSHP_DB_AGENT_NAME]"
+        tagValue: "adfin-mod-@[ADWRKSHP_LABUSER_KEY]-DBAgent"
+      - tagKey: "@[ADWRKSHP_CLOUD_DB_INST_PORT]"
+        tagValue: "3306"
+      - tagKey: "@[ADWRKSHP_CLOUD_DB_INST_USER]"
+        tagValue: "root"    
+      - tagKey: "@[ADWRKSHP_CLOUD_DB_INST_PWD]"
+        tagValue: "Welcome1!"    
+      - tagKey: "@[ADWRKSHP_CLOUD_DB_INST_ENDPOINT]"
+        tagValue: "localhost"    
+
+
+
+ # !!!! Ensure that this is the last controller task in the list of
+ # controller tasks defined in this file, otherwise permissions for 
+ # some objects created in the controller may be omitted
+ # 
+ # This task not only creates the RBAC User but also creates the RBAC Role
+ # for the user and links the user to the role
+  - taskType: "CONTROLLER_TASK_CREATE_RBAC_USER"
+    taskName: "create-rbac-user"
+
+    inputTags:
+      - tagKey: "@[ADWRKSHP_DEFAULT_RBAC_ROLE_IDS]"
+        tagValue: "286459,286308,286387"
+        #tagValue: "286459,286305,286308,286387,288654"
+        # 286459 = Analytics Viewer
+        # 286305 = DB Monitoring User
+        # 286308 = Server Monitoring User
+        # 286387 = viewinfraentity - Cluster Agent
+        # 288654 = SecureApp View Only
+
+    templateTargets:   
+      - templateName: "pre-mod-app-conf"
+        targetTags:
+          - tagKey: "${ADWRKSHP_CONTROLLER_HOST}"
+            tagValue: "@[ADWRKSHP_CONTROLLER_HOST]"    
+
+          - tagKey: "${ADWRKSHP_CONTROLLER_ACCT_NAME}"
+            tagValue: "@[ADWRKSHP_CONTROLLER_ACCT_NAME]"    
+
+          - tagKey: "${ADWRKSHP_ACCT_ACCESS_KEY}"
+            tagValue: "@[ADWRKSHP_ACCT_ACCESS_KEY]"    
+
+          - tagKey: "${ADWRKSHP_LABUSER_KEY}"
+            tagValue: "@[ADWRKSHP_LABUSER_KEY]"    
+
+      - templateName: "pre-mod-app-conf-examp"
+        targetTags:
+          - tagKey: "${ADWRKSHP_CONTROLLER_HOST}"
+            tagValue: "@[ADWRKSHP_CONTROLLER_HOST]"    
+
+          - tagKey: "${ADWRKSHP_CONTROLLER_ACCT_NAME}"
+            tagValue: "@[ADWRKSHP_CONTROLLER_ACCT_NAME]" 
+
+          #- tagKey: "${ADWRKSHP_ACCT_ACCESS_KEY}"
+          #  tagValue: "@[ADWRKSHP_ACCT_ACCESS_KEY]"
+
+          - tagKey: "${ADWRKSHP_LABUSER_KEY}"
+            tagValue: "@[ADWRKSHP_LABUSER_KEY]"    
+
+
+      - templateName: "workshop-user-details"
+        targetTags:
+          - tagKey: "${ADWRKSHP_CONTROLLER_HOST}"
+            tagValue: "@[ADWRKSHP_CONTROLLER_HOST]"    
+
+          - tagKey: "${ADWRKSHP_CONTROLLER_ACCT_NAME}"
+            tagValue: "@[ADWRKSHP_CONTROLLER_ACCT_NAME]"    
+
+          - tagKey: "${ADWRKSHP_LABUSER_KEY}"
+            tagValue: "@[ADWRKSHP_LABUSER_KEY]"    
+
+          - tagKey: "${ADWRKSHP_LABUSER_PWD}"
+            tagValue: "@[ADWRKSHP_LABUSER_PWD]"    
+
+
+
+            
+controllerFinalTasks:
+  - taskType: "CONTROLLER_TASK_CREATE_BT_ART_HEALTH_RULE"
+    taskName: "create-bt-art-health-rule-pre"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+        tagValue: "adfin-pre-mod-@[ADWRKSHP_LABUSER_KEY]"
+      - tagKey: "@[ADWRKSHP_HEALTH_RULE_NAME]"
+        tagValue: "Transaction Response Health"
+      - tagKey: "@[ADWRKSHP_HEALTH_RULE_ART_MILLIS]"
+        tagValue: "1000"
+      - tagKey: "@[ADWRKSHP_BT_ORIGNAL_NAME_01]"
+        tagValue: "/rest/loanVerifyDocumentation"
+      - tagKey: "@[ADWRKSHP_BT_ORIGNAL_NAME_02]"
+        tagValue: "/rest/loanUnderwritingComplete"
+      - tagKey: "@[ADWRKSHP_BT_ORIGNAL_NAME_03]"
+        tagValue: "/rest/loanCreditCheck"
+
+  - taskType: "CONTROLLER_TASK_CREATE_NODES_ART_HEALTH_RULE"
+    taskName: "create-nodes-art-health-rule-pre"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+        tagValue: "adfin-pre-mod-@[ADWRKSHP_LABUSER_KEY]"
+      - tagKey: "@[ADWRKSHP_HEALTH_RULE_NAME]"
+        tagValue: "Transaction Response Time"
+      - tagKey: "@[ADWRKSHP_HEALTH_RULE_ART_MILLIS]"
+        tagValue: "1000"
+
+# In order to ungroup flowmap components, you must include every Tier definition, Individual backend definition, 
+# and a definition for each backend group that initially shows up on the flowmap
+  - taskType: "CONTROLLER_TASK_UNGROUP_RENAME_FLOWMAP_COMPONENTS"
+    taskName: "ungroup-rename-flowmap-comps-pre"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+        tagValue: "adfin-pre-mod-@[ADWRKSHP_LABUSER_KEY]"
+        # format for the tagValue for "@[ADWRKSHP_FLOWMAP_COMPONENT]" is
+        # componentType (see "Flowmap Components" in com.appdynamics.cloud.modern.ApplicationConstants)
+        # componentOrginalName (as original seen on the flowmap),
+        # componentNewName (can be anything except a null or zero lenth string when renameComponent: false), (otherwise it will rename the component )
+        # renameComponent (true or false)
+        #
+        # (example - DB Component) - tagValue: "FM_DB_COMP,CASHACCOUNTS-MySQL-LOCALHOST-5.5.5-10.2.38-MariaDB,MySQL-5.7.38-CASHACCOUNTS,true"
+        # (example - Tier Component) - tagValue: "FM_TIER_COMP,FinancialServices,xxx,false"
+        # (example - Backend Group Component) - tagValue: "FM_BACKEND_GROUP_COMPBackendGoup1,xxx,false"
+        #
+        # Note: For "FM_BACKEND_GROUP_COMP" types, componentOrginalName can be anything except null or a zero length string,
+        # and the "componentNewName" value can be arbitrary since their will be no renaming on these
+        # For "FM_TIER_COMP"
+        # It's advised to name each tagKey as "@[ADWRKSHP_FLOWMAP_COMPONENT" with a unique number as the suffix
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_01]"
+        tagValue: "FM_TIER_COMP,FinancialServices,xxx,false"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_02]"
+        tagValue: "FM_TIER_COMP,WebFrontEnd,xxx,false"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_03]"
+        tagValue: "FM_DB_JDBC_MYSQL_COMP,LOANACCOUNTS-MySQL-LOCALHOST-5.5.5-10.2.38-MariaDB,MySQL-5.7.38-LOANACCOUNTS,true"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_04]"
+        tagValue: "FM_DB_JDBC_MYSQL_COMP,LOANACCOUNTS-MySQL-LOCALHOST-5.5.5-10.2.38-MariaDB,MySQL-5.7.38-LOANACCOUNTS,true"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_05]"
+        tagValue: "FM_DB_JDBC_MYSQL_COMP,CASHACCOUNTS-MySQL-LOCALHOST-5.5.5-10.2.38-MariaDB,MySQL-5.7.38-CASHACCOUNTS,true"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_06]"
+        tagValue: "FM_RS_HTTP_COMP,fso-payment-gw-sim.azurewebsites.net:443,mcard-payment-gw-sim.mcard.net:443,true"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_07]"
+        tagValue: "FM_RS_HTTP_COMP,amex-fso-payment-gw-sim.azurewebsites.net:443,amex-payment-gw-sim.amex.net:443,true"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_08]"
+        tagValue: "FM_RS_HTTP_COMP,www.equifax.com:443,xxx,false"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_09]"
+        tagValue: "FM_RS_MONGODB_COMP,localhost.27017.stocks,MongoDB.27017.stocks,true"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_10]"
+        tagValue: "FM_RS_MONGODB_COMP,localhost.27017.orders,MongoDB.27017.orders,true"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_11]"
+        tagValue: "FM_RS_MONGODB_COMP,localhost.27017.policies,MongoDB.27017.policies,true"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_12]"
+        tagValue: "FM_BACKEND_GROUP_COMP,BackendGoup1,xxx,false"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_13]"
+        tagValue: "FM_BACKEND_GROUP_COMP,BackendGoup2,xxx,false"
+      - tagKey: "@[ADWRKSHP_FLOWMAP_COMPONENT_14]"
+        tagValue: "FM_BACKEND_GROUP_COMP,BackendGoup3,xxx,false"
+
+  - taskType: "CONTROLLER_TASK_CREATE_DB_TO_COLLECTOR_LINKS"
+    taskName: "create-db-to-collector-links-pre"
+    inputTags:
+      - tagKey: "@[ADWRKSHP_APM_APP_NAME_PRE]"
+        tagValue: "adfin-pre-mod-@[ADWRKSHP_LABUSER_KEY]"
+            
+            
+
+vaultInfo:
+  vaultHost: 
+  validateSsl: false
+  authStr: 
+  uriPaths:
+    - name: auth
+      value: /v1/auth/userpass/login/cloud-team
+    - name: controller-info
+      value: /v1/kv/cloud-labs/controller-info
+    - name: controller-login-info
+      value: /v1/kv/cloud-labs/controller-login-info
+    - name: dbagent-s3-auth
+      value: /v1/kv/cloud-labs/dbagent-s3-auth
+      
