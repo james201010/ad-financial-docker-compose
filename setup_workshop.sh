@@ -61,8 +61,8 @@ export AWS_MAX_ATTEMPTS=100
 df_output=$(df -khT)
 
 if [[ !$df_output != *"/dev/nvme0n1p1 xfs"* ]]; then
-  echo " CloudWorkshop|ERROR| - Oops, :(  it looks like you may have accidentally selected Amazon Linux instead of Amazon Linux 2 for the Platform option."
-  echo " CloudWorkshop|ERROR| - Please discard this Cloud9 instance and create a new one with the required Amazon Linux 2 Platform option."
+  echo "CloudWorkshop|ERROR| - Oops, :(  it looks like you may have accidentally selected Amazon Linux instead of Amazon Linux 2 for the Platform option."
+  echo "CloudWorkshop|ERROR| - Please discard this Cloud9 instance and create a new one with the required Amazon Linux 2 Platform option."
   #echo "$df_output"
   exit 1
 fi
@@ -76,11 +76,11 @@ fi
 
 ##### Check if extenal controller details file path has been set and validate it
 if [ -z "$appd_controller_details_file_path" ]; then
-  echo " CloudWorkshop|INFO| - The 'appd_controller_details_file_path' environment variable was not set. Default channel.saas.appdynamics.com will be utilized"
+  echo "CloudWorkshop|INFO| - The 'appd_controller_details_file_path' environment variable was not set. Default channel.saas.appdynamics.com will be utilized"
 else 
   
-  echo " CloudWorkshop|INFO| - The 'appd_controller_details_file_path' environment variable was set to" $appd_controller_details_file_path
-  echo " CloudWorkshop|INFO| - Checking the validity of the 'controller-info.yaml' file"
+  echo "CloudWorkshop|INFO| - The 'appd_controller_details_file_path' environment variable was set to" $appd_controller_details_file_path
+  echo "CloudWorkshop|INFO| - Checking the validity of the 'controller-info.yaml' file"
   
 
   # rm -f ./scripts/state/controller-config-file-valid.txt
@@ -89,9 +89,9 @@ else
   
   if [ -f "./scripts/state/controller-config-file-valid.txt" ]; then
      appd_controller_details_file_valid=$(cat ./scripts/state/controller-config-file-valid.txt)
-     echo " CloudWorkshop|INFO| - The validation of the 'controller-info.yaml' file was successful"
+     echo "CloudWorkshop|INFO| - The validation of the 'controller-info.yaml' file was successful"
   else
-     echo " CloudWorkshop|ERROR| - The validation of the 'controller-info.yaml' file failed"
+     echo "CloudWorkshop|ERROR| - The validation of the 'controller-info.yaml' file failed"
      exit 1
   fi
   
@@ -120,21 +120,21 @@ else
   # validate mandatory environment variables.
 
   if [ -z "$appd_workshop_user" ]; then
-    echo " CloudWorkshop|ERROR| - 'appd_workshop_user' environment variable not set or is not at least five alpha characters in length."
+    echo "CloudWorkshop|ERROR| - 'appd_workshop_user' environment variable not set or is not at least five alpha characters in length."
     exit 1
   fi
 
   LEN=$(echo ${#appd_workshop_user})
 
   if [ $LEN -lt 5 ]; then
-    echo " CloudWorkshop|ERROR| - 'appd_workshop_user' environment variable not set or is not at least five alpha characters in length."
+    echo "CloudWorkshop|ERROR| - 'appd_workshop_user' environment variable not set or is not at least five alpha characters in length."
     exit 1
   fi
 
 
   if [ "$appd_workshop_user" == "<YOUR USER NAME>" ]; then
-    echo " CloudWorkshop|ERROR| - 'appd_workshop_user' environment variable not set properly. It should be at least five alpha characters in length."
-    echo " CloudWorkshop|ERROR| - 'appd_workshop_user' environment variable should not be set to <YOUR USER NAME>."
+    echo "CloudWorkshop|ERROR| - 'appd_workshop_user' environment variable not set properly. It should be at least five alpha characters in length."
+    echo "CloudWorkshop|ERROR| - 'appd_workshop_user' environment variable should not be set to <YOUR USER NAME>."
     exit 1
   fi
 
