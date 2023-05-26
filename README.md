@@ -68,9 +68,7 @@ Then run the setup script with the command below:
 
 
 
-PLEASE! When you are finished with the workshop, kindly run the 'teardown_workshop.sh' script to delete all the resources in AWS and the AppDynamics Controller that were created during the workshop by using the commands below:
-
-Example below:
+When you are finished with the workshop, kindly run the 'teardown_workshop.sh' script to delete all the resources in the AppDynamics CSaaS Controller that were created during the workshop setup by using the example commands below:
 ```
 cd /home/ec2-user/environment/modernization_workshop
 
