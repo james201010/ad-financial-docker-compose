@@ -78,6 +78,7 @@ Run the setup script with the command below after you have set all the appropria
 
 ### Remove the Application and associated Controller assets
 When you are finished with the application, kindly run the 'teardown_workshop.sh' script to delete all the resources in the AppDynamics CSaaS Controller that were created during the setup by using the example commands below:
+
 ```
 cd /home/ec2-user/environment/adfin-docker
 
@@ -85,5 +86,11 @@ cd /home/ec2-user/environment/adfin-docker
 ```
 
 ### Explore the AD-Financial Web UI
+
+1. Obtain the public IP Address or Host Name of the VM you deployed the application to and construct the URL to hit the home page, including the port seen below in the example:
+
+```
+http://10.20.77.1:8080
+```
 
 ![image](https://github.com/james201010/ad-financial-docker-compose/assets/7450910/272134c7-0fab-45e5-8d5e-d1415dd788fb)
