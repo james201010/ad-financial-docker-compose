@@ -1,6 +1,6 @@
 ## AD-Financial running as a Docker-Compose application
 
-![image](flowmap.png)
+![image](https://github.com/james201010/ad-financial-docker-compose/blob/main/flowmap.png?raw=true)
 
 
 Use the steps below to deploy AD-Fiancial as a self-contained docker-compose application.
