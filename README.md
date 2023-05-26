@@ -5,7 +5,7 @@ Use the steps below to deploy AD-Fiancial as a self-contained docker-compose app
 
 This application needs 8GB Memory and 60GB-80GB of Disk to run properly.
 
-### Setup Steps
+### Set Setup Variables First
 
 Navigate to the directory where you want the GitHub repository to be cloned to.
 
@@ -44,7 +44,7 @@ export appd_workshop_resize_disk=true
 export appd_workshop_user=jrshn
 ```
 
-7. **Optional**: If you want to target the application to your own CSaaS Controller then edit the '/home/ec2-user/environment/adfin-docker/controller-config.yaml' file with your controller details and the user name and password for a controller login user that has the **'Account Owner'** role assigned.  Then set the variable that points to the 'controller-config.yaml' file like the example below. (**Do this Before you run setup_workshop.sh**) - (**Only run setup_workshop.sh once**)
+7. **Required**: To target the application to your own CSaaS Controller then edit the '/home/ec2-user/environment/adfin-docker/controller-config.yaml' file with your controller details and the user name and password for a controller login user that has the **'Account Owner'** role assigned.  Then set the variable that points to the 'controller-config.yaml' file like the example below. Do this **before you run** the **setup_workshop.sh**
 
 ```
 export appd_controller_details_file_path=/home/ec2-user/environment/adfin-docker/controller-config.yaml
@@ -57,16 +57,16 @@ export appd_controller_create_rbac_user=true
 ```
 
 
-### Workshop setup
-Run the setup script with the command below after you have sett all the appropriate variable mentioned above:
+### Run the Setup Script
+Run the setup script with the command below after you have sett all the appropriate variable mentioned above.  **Only run setup_workshop.sh once**
 
 ```
 ./setup_workshop.sh
 ```
 
 
-
-When you are finished with the workshop, kindly run the 'teardown_workshop.sh' script to delete all the resources in the AppDynamics CSaaS Controller that were created during the workshop setup by using the example commands below:
+### Remove the Application and associated Controller assets
+When you are finished with the application, kindly run the 'teardown_workshop.sh' script to delete all the resources in the AppDynamics CSaaS Controller that were created during the setup by using the example commands below:
 ```
 cd /home/ec2-user/environment/adfin-docker
 

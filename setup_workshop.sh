@@ -94,7 +94,9 @@ fi
 
 ##### Check if extenal controller details file path has been set and validate it
 if [ -z "$appd_controller_details_file_path" ]; then
-  echo "CloudWorkshop|INFO| - The 'appd_controller_details_file_path' environment variable was not set. Default channel.saas.appdynamics.com will be utilized"
+  echo "CloudWorkshop|ERROR| - The 'appd_controller_details_file_path' environment variable was not set."
+  echo "CloudWorkshop|ERROR| - Please set the 'appd_controller_details_file_path' environment variable to point to the 'controller-config.txt' file."
+  exit 1
 else 
   
   echo "CloudWorkshop|INFO| - The 'appd_controller_details_file_path' environment variable was set to" $appd_controller_details_file_path
