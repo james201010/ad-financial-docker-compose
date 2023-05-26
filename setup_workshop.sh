@@ -70,6 +70,11 @@ echo "##########################################################################
 export AWS_RETRY_MODE=standard
 export AWS_MAX_ATTEMPTS=100
 
+##### This assumes that the Git Repo has been cloned
+if [ ! -d ./scripts/state ]; then
+  mkdir ./scripts/state
+fi
+
 appd_controller_details_file_valid="${appd_controller_details_file_valid:-false}"
 
 ##### Check if workshop root directory path has been set and validate it
@@ -85,12 +90,6 @@ else
   echo "CloudWorkshop|INFO| - The 'appd_workshop_root_directory' environment variable was set to" $appd_workshop_root_directory
   echo "$appd_workshop_root_directory" > ./scripts/state/appd_workshop_root_dir.txt
 fi
-
-##### This assumes that the Git Repo has been cloned
-if [ ! -d ./scripts/state ]; then
-  mkdir ./scripts/state
-fi
-
 
 
 ##### Check if extenal controller details file path has been set and validate it
