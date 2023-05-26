@@ -2,25 +2,15 @@
 
 ## Artifacts for AD-Financial running as a Docker-Compose application.
 
-### Create you Cloud9 instance
-After creating your Cloud9 instance and configuring it by following all the steps included in these web pages:
-
-https://povpbmodernize.appdpartnerlabs.net/30_workshop_setup/1_create_cloud9.html
-
-https://povpbmodernize.appdpartnerlabs.net/30_workshop_setup/1_create_cloud9.html
-
-https://povpbmodernize.appdpartnerlabs.net/30_workshop_setup/2_create_iam_role.html
-
-https://povpbmodernize.appdpartnerlabs.net/30_workshop_setup/3_attach_iam_role.html
-
-https://povpbmodernize.appdpartnerlabs.net/30_workshop_setup/4_cloud9_update.html
 
 
 Then use the commands below to finish setting up the rest of the lab:
 
 ### Clone the GitHub repository
 
-Clone this GitHub repository:
+Navigate to the directory where you want the GitHub repository to be cloned to.
+
+Clone this GitHub repository using the command below:
 
 ```
 git clone https://github.com/james201010/ad-financial-docker-compose.git adfin-docker
@@ -29,7 +19,7 @@ git clone https://github.com/james201010/ad-financial-docker-compose.git adfin-d
 Change directory to where the repo has been cloned
 
 ```
-cd /home/ec2-user/environment/ad-financial-docker-compose
+cd /home/ec2-user/environment/adfin-docker
 ```
 
 
@@ -40,11 +30,18 @@ export appd_workshop_user=jrshn
 
 ### Switching to your own controller
 
-**OPTIONAL:** If you want to target your own controller then edit the '/home/ec2-user/environment/modernization_workshop/controller-config.yaml' file with your controller details and the user name and password for a controller login user that has the **'Account Owner'** role assigned.  Then set the variable that points to the 'controller-config.yaml' file like the example below. (**Do this Before you run setup_workshop.sh**) - (**Only run setup_workshop.sh once**)
+**OPTIONAL:** If you want to target your own controller then edit the '/home/ec2-user/environment/adfin-docker/controller-config.yaml' file with your controller details and the user name and password for a controller login user that has the **'Account Owner'** role assigned.  Then set the variable that points to the 'controller-config.yaml' file like the example below. (**Do this Before you run setup_workshop.sh**) - (**Only run setup_workshop.sh once**)
 
 ```
 export appd_controller_details_file_path=./controller-config.yaml
 ```
+
+When you provide your own 'controller-config.yaml' file, then you have the option to tell the setup utility to create a unique RBAC User and Role for a lab participant or not by setting the variable shown below to either true or false.  The default vaule is false.
+
+```
+export appd_controller_create_rbac_user=true
+```
+
 
 ### Workshop setup
 Then run the setup script with the command below which performs the tasks listed in the link below:

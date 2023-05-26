@@ -1,28 +1,39 @@
 #!/bin/bash
 
-
 #
 # Utility script to initialize the workshop prerequisites on the Cloud9 EC2 instance
 #
-# Before this script is run, the lab user should execute the three commands seen below:
+# Before this script is run, the lab user should execute the four commands seen below:
 #
 # 
-# git clone https://github.com/Appdynamics/appd_aws_observability_lab.git modernization_workshop
+# git clone https://github.com/james201010/ad-financial-docker-compose.git adfin-docker
 # 
-# cd modernization_workshop
+# cd adfin-docker
+#
+# export appd_workshop_root_directory=/home/ec2-user/environment/adfin-docker/
+#
 # export appd_workshop_user=jedi
 #
 # NOTE: All inputs are defined by external environment variables.
 #       Optional variables have reasonable defaults, but you may override as needed.
 #---------------------------------------------------------------------------------------------------
 
+# [MANDATORY] workshop root directory where the 'setup_workshop.sh' file resides.
+# export appd_workshop_root_directory=/home/ec2-user/environment/adfin-docker/
+appd_workshop_root_directory="${appd_workshop_root_directory:-}"
 
 # [MANDATORY] workshop user identity.
 appd_workshop_user="${appd_workshop_user:-}"
 
 # [OPTIONAL] setup parameters
+
+# export appd_workshop_install_prereqs=true
+appd_workshop_install_prereqs="${appd_workshop_install_prereqs:-false}"
+
+# export appd_controller_details_file_path=/home/ec2-user/environment/adfin-docker/controller-config.yaml
 appd_controller_details_file_path="${appd_controller_details_file_path:-}"
-appd_controller_details_file_valid="${appd_controller_details_file_valid:-false}"
+
+# export appd_controller_create_rbac_user=true
 appd_controller_create_rbac_user="${appd_controller_create_rbac_user:-false}"
 
 echo ""
@@ -56,15 +67,20 @@ echo "##########################################################################
 export AWS_RETRY_MODE=standard
 export AWS_MAX_ATTEMPTS=100
 
+appd_controller_details_file_valid="${appd_controller_details_file_valid:-false}"
 
-##### check to see if we have the XFS file system
-df_output=$(df -khT)
+##### Check if workshop root directory path has been set and validate it
+appd_workshop_setup_script=$(echo $appd_workshop_root_directory"/setup_workshop.sh")
 
-if [[ !$df_output != *"/dev/nvme0n1p1 xfs"* ]]; then
-  echo "CloudWorkshop|ERROR| - Oops, :(  it looks like you may have accidentally selected Amazon Linux instead of Amazon Linux 2 for the Platform option."
-  echo "CloudWorkshop|ERROR| - Please discard this Cloud9 instance and create a new one with the required Amazon Linux 2 Platform option."
-  #echo "$df_output"
+echo $appd_workshop_setup_script
+
+if [ ! -f $appd_workshop_setup_script ]; then
+  echo "CloudWorkshop|ERROR| - The 'appd_workshop_root_directory' environment variable was not set."
+  echo "CloudWorkshop|ERROR| - Please set the 'appd_workshop_root_directory' environment variable to the root directory where the 'setup_workshop.sh' file resides."
   exit 1
+else 
+  echo "CloudWorkshop|INFO| - The 'appd_workshop_root_directory' environment variable was set to" $appd_workshop_root_directory
+  echo "$appd_workshop_root_directory" > ./scripts/state/appd_workshop_root_dir.txt
 fi
 
 ##### This assumes that the Git Repo has been cloned
@@ -107,7 +123,10 @@ sed -i -e 's/\r$//' teardown_workshop.sh
 
 
 ##### Resize the EBS Volume
-./scripts/resize_al2_ebs_volume.sh
+if [ "$appd_workshop_install_prereqs" == "true" ]; then
+  ./scripts/resize_al2_ebs_volume.sh
+fi
+
 
 
 # check to see if user_id file exists and if so read in the user_id
@@ -152,7 +171,7 @@ else
   # write the Hostname to a file   example:  ip-172-31-14-237.us-west-1.compute.internal
   echo "$HOSTNAME" > ./scripts/state/appd_env_host.txt
 
-fi	
+fi  
 
 # !!!!!!! BEGIN BIG IF BLOCK !!!!!!!
 if [ -f "./scripts/state/appd_workshop_setup.txt" ]; then
@@ -170,24 +189,31 @@ if [ -f "./scripts/state/appd_workshop_setup.txt" ]; then
 else
 
 
-echo "####################################################################################################"
-echo " Start Installing Java 1.8"
-echo "####################################################################################################"
-echo ""
 
-sudo rpm --import https://yum.corretto.aws/corretto.key
+if [ "$appd_workshop_install_prereqs" == "true" ]; then
+  echo "####################################################################################################"
+  echo " Start Installing Java 1.8"
+  echo "####################################################################################################"
+  echo ""
 
-sudo curl --silent -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo
+  sudo rpm --import https://yum.corretto.aws/corretto.key
 
-sudo yum install -y java-1.8.0-amazon-corretto-devel
+  sudo curl --silent -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo
 
-java -version
+  sudo yum install -y java-1.8.0-amazon-corretto-devel
 
-echo ""
-echo "####################################################################################################"
-echo " Finished Installing Java 1.8"
-echo "####################################################################################################"
-echo ""
+  java -version
+
+
+  echo ""
+  echo "####################################################################################################"
+  echo " Finished Installing Java 1.8"
+  echo "####################################################################################################"
+  echo ""
+  
+  ./scripts/install_docker_compose.sh
+  
+fi
 
 ##### Create directories for local agents
 

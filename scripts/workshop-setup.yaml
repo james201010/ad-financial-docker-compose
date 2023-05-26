@@ -15,8 +15,8 @@ teardownScript: "./scripts/terminate_applications.sh"
 
 
 taskExecutionOrder:
-  - taskType: "SHELL_TASK"
-    taskName: "workshop-prereqs-sh"
+#  - taskType: "SHELL_TASK"
+#    taskName: "workshop-prereqs-sh"
   - taskType: "SHELL_TASK"
     taskName: "deploy-db-agent"
   - taskType: "SHELL_TASK"
