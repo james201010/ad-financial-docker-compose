@@ -99,6 +99,7 @@ http://10.20.77.1:8080
 
 3. Click on the four different accounts to explore the transactions seen in each account
 
+![image](https://github.com/james201010/ad-financial-docker-compose/assets/7450910/ab7bbd95-1457-4fd3-a12f-e1425a62f9c5)
 
 
 
