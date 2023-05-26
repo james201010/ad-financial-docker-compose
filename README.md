@@ -15,50 +15,50 @@ If you are using a clean AWS Cloud9 instance (t3.large) then you can set the var
 
 ### Set Setup Variables First
 
-Navigate to the directory where you want the GitHub repository to be cloned to.
+1. Navigate to the directory where you want the GitHub repository to be cloned to.
 
-1. **Required**: Clone this GitHub repository using the command below:
+2. **Required**: Clone this GitHub repository using the command below:
 
 ```
 git clone https://github.com/james201010/ad-financial-docker-compose.git adfin-docker
 ```
 
-2. **Required**: Change directory to where the repo has been cloned.  Example below:
+3. **Required**: Change directory to where the repo has been cloned.  Example below:
 
 ```
 cd /home/ec2-user/environment/adfin-docker
 ```
 
-3. **Required**: Set the workshop root directory variable to where the 'setup_workshop.sh' file resides.  Example below:
+4. **Required**: Set the workshop root directory variable to where the 'setup_workshop.sh' file resides.  Example below:
 
 ```
 export appd_workshop_root_directory=/home/ec2-user/environment/adfin-docker/
 ```
 
-4. **Optional**: Set the flag to install prerequisite software on AL2 OS (Java 1.8, Docker-Compose) **(default = false)**
+5. **Optional**: Set the flag to install prerequisite software on AL2 OS (Java 1.8, Docker-Compose) **(default = false)**
 
 ```
 export appd_workshop_install_prereqs=true
 ```
 
-5. **Optional**: Set the flag to increase the AWS Cloud9 EBS Volume to 80GB if using a Cloud9 VM **(default = false)**.  Example below:
+6. **Optional**: Set the flag to increase the AWS Cloud9 EBS Volume to 80GB if using a Cloud9 VM **(default = false)**.  Example below:
 
 ```
 export appd_workshop_resize_disk=true
 ```
 
-6. **Required**: Set the lab user id variable to at least 5 character name. This is used to construct the Application name and create the CSaaS Controller RBAC User and Role.  Example below:
+7. **Required**: Set the lab user id variable to at least 5 character name. This is used to construct the Application name and create the CSaaS Controller RBAC User and Role.  Example below:
 ```
 export appd_workshop_user=jrshn
 ```
 
-7. **Required**: To target the application to your own CSaaS Controller then edit the '/home/ec2-user/environment/adfin-docker/controller-config.yaml' file with your controller details and the user name and password for a controller login user that has the **'Account Owner'** role assigned.  Then set the variable that points to the 'controller-config.yaml' file like the example below. Do this **before you run** the **setup_workshop.sh**
+8. **Required**: To target the application to your own CSaaS Controller then edit the '/home/ec2-user/environment/adfin-docker/controller-config.yaml' file with your controller details and the user name and password for a controller login user that has the **'Account Owner'** role assigned.  Then set the variable that points to the 'controller-config.yaml' file like the example below. Do this **before you run** the **setup_workshop.sh**
 
 ```
 export appd_controller_details_file_path=/home/ec2-user/environment/adfin-docker/controller-config.yaml
 ```
 
-8. **Optional**: When you provide your own 'controller-config.yaml' file, then you have the option to tell the setup utility to create a unique CSaaS Controller RBAC User and Role for a lab participant or not, by setting the variable shown below to either true or false **(default = false)**.  Example below:
+9. **Optional**: When you provide your own 'controller-config.yaml' file, then you have the option to tell the setup utility to create a unique CSaaS Controller RBAC User and Role for a lab participant or not, by setting the variable shown below to either true or false **(default = false)**.  Example below:
 
 ```
 export appd_controller_create_rbac_user=true
