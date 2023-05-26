@@ -2,7 +2,7 @@
 
 ![image](https://github.com/james201010/ad-financial-docker-compose/assets/7450910/34964057-7682-4478-9cc2-502bb89ba90f)
 
-Use the steps below to deploy AD-Fiancial as a self-contained docker-compose application.
+Use the steps below to deploy AD-Financial as a self-contained docker-compose application.
 
 This application needs 8GB Memory and 70GB-80GB of Disk to run properly.  If you are using an AWS Cloud9 instance then it is assumed that you already have the following on the VM you will run the application on:
 
@@ -11,7 +11,7 @@ This application needs 8GB Memory and 70GB-80GB of Disk to run properly.  If you
 - At least 8GB free Memory
 - At least 70GB free disk space
 
-If you are using a clean Cloud9 instance (t3.large) then you can set the variables **appd_workshop_install_prereqs=true** and **appd_workshop_resize_disk=true** and the setup utility will take care of those prerequisites.
+If you are using a clean AWS Cloud9 instance (t3.large) then you can set the variables **appd_workshop_install_prereqs=true** and **appd_workshop_resize_disk=true** and the setup utility will take care of those prerequisites for you.
 
 ### Set Setup Variables First
 
