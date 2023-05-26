@@ -30,6 +30,9 @@ appd_workshop_user="${appd_workshop_user:-}"
 # export appd_workshop_install_prereqs=true
 appd_workshop_install_prereqs="${appd_workshop_install_prereqs:-false}"
 
+# export appd_workshop_resize_disk=true
+appd_workshop_resize_disk="${appd_workshop_resize_disk:-false}"
+
 # export appd_controller_details_file_path=/home/ec2-user/environment/adfin-docker/controller-config.yaml
 appd_controller_details_file_path="${appd_controller_details_file_path:-}"
 
@@ -123,7 +126,7 @@ sed -i -e 's/\r$//' teardown_workshop.sh
 
 
 ##### Resize the EBS Volume
-if [ "$appd_workshop_install_prereqs" == "true" ]; then
+if [ "$appd_workshop_resize_disk" == "true" ]; then
   ./scripts/resize_al2_ebs_volume.sh
 fi
 

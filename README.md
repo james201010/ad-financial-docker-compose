@@ -1,37 +1,45 @@
-## AD-Financial running as a Docker-Compose application.
+## AD-Financial running as a Docker-Compose application
 
 
-Use the commands below to set deploy AD-Fiancial as a self-contained docker-compose application.
+Use the steps below to deploy AD-Fiancial as a self-contained docker-compose application.
 
 This application needs 8GB Memory and 60GB-80GB of Disk to run properly.
 
-### Clone the GitHub repository
+### Setup Steps
 
 Navigate to the directory where you want the GitHub repository to be cloned to.
 
-1. Clone this GitHub repository using the command below:
+1. Required: Clone this GitHub repository using the command below:
 
 ```
 git clone https://github.com/james201010/ad-financial-docker-compose.git adfin-docker
 ```
 
-2. Change directory to where the repo has been cloned
-Example below:
+2. Required: Change directory to where the repo has been cloned.  Example below:
 
 ```
 cd /home/ec2-user/environment/adfin-docker
 ```
 
-3. Set the workshop root directory variable to where the 'setup_workshop.sh' file resides.
-Example below:
+3. Required: Set the workshop root directory variable to where the 'setup_workshop.sh' file resides.  Example below:
+
 ```
 export appd_workshop_root_directory=/home/ec2-user/environment/adfin-docker/
 ```
 
+4. Optional: Set the flag to install prerequisite software on AL2 OS (Java 1.8, Docker-Compose) (default = false)
 
-Set the lab user id variable to at least 5 character name. This is used to create the Application name and the CSaaS RBAC User and Role.  
+```
+export appd_workshop_install_prereqs=true
+```
 
-Example below:
+5. Optional: Set the flag to increase the AL2 VM to 80BG if using a Cloud9 VM (default = false).  Example below:
+
+```
+export appd_workshop_resize_disk=true
+```
+
+6. Required: Set the lab user id variable to at least 5 character name. This is used to construct the Application name and create the CSaaS Controller RBAC User and Role.  Example below:
 ```
 export appd_workshop_user=jrshn
 ```
@@ -44,7 +52,7 @@ export appd_workshop_user=jrshn
 export appd_controller_details_file_path=./controller-config.yaml
 ```
 
-When you provide your own 'controller-config.yaml' file, then you have the option to tell the setup utility to create a unique RBAC User and Role for a lab participant or not by setting the variable shown below to either true or false.  The default vaule is false.
+When you provide your own 'controller-config.yaml' file, then you have the option to tell the setup utility to create a unique CSaaS Controller RBAC User and Role for a lab participant or not, by setting the variable shown below to either true or false (default = false).  Example below:
 
 ```
 export appd_controller_create_rbac_user=true
