@@ -84,3 +84,6 @@ cd /home/ec2-user/environment/adfin-docker
 ./teardown_workshop.sh
 ```
 
+### Explore the AD-Financial Web UI
+
+![image](https://github.com/james201010/ad-financial-docker-compose/assets/7450910/272134c7-0fab-45e5-8d5e-d1415dd788fb)
