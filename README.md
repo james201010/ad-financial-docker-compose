@@ -35,13 +35,13 @@ cd /home/ec2-user/environment/adfin-docker
 export appd_workshop_root_directory=/home/ec2-user/environment/adfin-docker/
 ```
 
-4. **Optional**: Set the flag to install prerequisite software on AL2 OS (Java 1.8, Docker-Compose) (default = false)
+4. **Optional**: Set the flag to install prerequisite software on AL2 OS (Java 1.8, Docker-Compose) **(default = false)**
 
 ```
 export appd_workshop_install_prereqs=true
 ```
 
-5. **Optional**: Set the flag to increase the AL2 VM to 80BG if using a Cloud9 VM (default = false).  Example below:
+5. **Optional**: Set the flag to increase the AL2 VM to 80BG if using a Cloud9 VM **(default = false)**.  Example below:
 
 ```
 export appd_workshop_resize_disk=true
@@ -58,7 +58,7 @@ export appd_workshop_user=jrshn
 export appd_controller_details_file_path=/home/ec2-user/environment/adfin-docker/controller-config.yaml
 ```
 
-8. **Optional**: When you provide your own 'controller-config.yaml' file, then you have the option to tell the setup utility to create a unique CSaaS Controller RBAC User and Role for a lab participant or not, by setting the variable shown below to either true or false (default = false).  Example below:
+8. **Optional**: When you provide your own 'controller-config.yaml' file, then you have the option to tell the setup utility to create a unique CSaaS Controller RBAC User and Role for a lab participant or not, by setting the variable shown below to either true or false **(default = false)**.  Example below:
 
 ```
 export appd_controller_create_rbac_user=true
@@ -69,7 +69,7 @@ If you set the flag telling the setup utility to create a unique CSaaS Controlle
 
 
 ### Run the Setup Script
-Run the setup script with the command below after you have sett all the appropriate variable mentioned above.  **Only run setup_workshop.sh once**
+Run the setup script with the command below after you have set all the appropriate variable mentioned above.  **Only run setup_workshop.sh once**
 
 ```
 ./setup_workshop.sh
