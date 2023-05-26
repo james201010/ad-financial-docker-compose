@@ -295,6 +295,20 @@ controllerTasks:
         tagValue: "localhost"    
 
 
+#  - taskType: "CONTROLLER_TASK_SET_DASHBOARD_PERMISSIONS"
+#    taskName: "set-dashboard-access-loancomp"
+#    inputTags:
+#      - tagKey: "@[ADWRKSHP_DASHBOARD_ID]"
+#        tagValue: "376039"    
+#      - tagKey: "@[ADWRKSHP_DASHBOARD_ACTION_VIEW]"
+#        tagValue: "true"    
+#      - tagKey: "@[ADWRKSHP_DASHBOARD_ACTION_EDIT]"
+#        tagValue: "false"
+#      - tagKey: "@[ADWRKSHP_DASHBOARD_ACTION_DELETE]"
+#        tagValue: "false"
+#      - tagKey: "@[ADWRKSHP_DASHBOARD_ACTION_SHARE]"
+#        tagValue: "false"    
+
 
  # !!!! Ensure that this is the last controller task in the list of
  # controller tasks defined in this file, otherwise permissions for 

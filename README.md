@@ -3,7 +3,7 @@
 
 Use the steps below to deploy AD-Fiancial as a self-contained docker-compose application.
 
-This application needs 8GB Memory and 60GB-80GB of Disk to run properly.
+This application needs 8GB Memory and 70GB-80GB of Disk to run properly.
 
 ### Set Setup Variables First
 
@@ -55,6 +55,9 @@ export appd_controller_details_file_path=/home/ec2-user/environment/adfin-docker
 ```
 export appd_controller_create_rbac_user=true
 ```
+### Set ID's for Default RBAC Roles for your Controller
+
+If you set the flag telling the setup utility to create a unique CSaaS Controller RBAC User and Role for a lab participant, then you will need to adjust the ID's for the default Roles you want assigned to that RBAC User.  Edit the './scripts/workshop-setup.yaml' on line 324 before you run the setup script.
 
 
 ### Run the Setup Script
