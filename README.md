@@ -41,7 +41,7 @@ export appd_workshop_root_directory=/home/ec2-user/environment/adfin-docker/
 export appd_workshop_install_prereqs=true
 ```
 
-5. **Optional**: Set the flag to increase the AL2 VM to 80BG if using a Cloud9 VM **(default = false)**.  Example below:
+5. **Optional**: Set the flag to increase the AWS Cloud9 EBS Volume to 80GB if using a Cloud9 VM **(default = false)**.  Example below:
 
 ```
 export appd_workshop_resize_disk=true
