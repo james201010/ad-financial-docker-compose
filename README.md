@@ -1,10 +1,9 @@
 # ad-financial-docker-compose
 
-## Artifacts for AD-Financial running as a Docker-Compose application.
+## AD-Financial running as a Docker-Compose application.
 
 
-
-Then use the commands below to finish setting up the rest of the lab:
+Use the commands below to set deploy:
 
 ### Clone the GitHub repository
 
@@ -17,13 +16,16 @@ git clone https://github.com/james201010/ad-financial-docker-compose.git adfin-d
 ```
 
 Change directory to where the repo has been cloned
+Example below:
 
 ```
 cd /home/ec2-user/environment/adfin-docker
 ```
 
 
-Set lab user id to at least 5 character name
+Set lab user id to at least 5 character name. This is used to create the Application name and the CSaaS RBAC User and Role
+
+Example below:
 ```
 export appd_workshop_user=jrshn
 ```
@@ -44,46 +46,17 @@ export appd_controller_create_rbac_user=true
 
 
 ### Workshop setup
-Then run the setup script with the command below which performs the tasks listed in the link below:
-https://povpbmodernize.appdpartnerlabs.net/30_workshop_setup/5_start_engines.html#what-the-setup-utility-does
-Note: The initial setup takes about 24 minutes to complete
+Then run the setup script with the command below:
 
 ```
 ./setup_workshop.sh
 ```
 
-Once the initial setup has completed, then next step is to create the EKS cluster with the commands below:
-Note: The EKS cluster creation takes about 15 minutes to complete
-
-```
-cd /home/ec2-user/environment/modernization_workshop
-
-./create_eks_cluster.sh
-```
-
-Once the EKS cluster creation has completed, then next step is to deploy the 'post-modernization' application the EKS cluster with the commands below:
-
-```
-cd /home/ec2-user/environment/modernization_workshop
-
-./deploy_eks_application.sh
-```
-
-Once the 'post-modernization' application deployment has completed, then next step is to deploy the AppDynamics Agents with the commands below:
-
-```
-cd /home/ec2-user/environment/modernization_workshop
-
-./deploy_appdynamics_agents.sh
-```
-
-Now it's time to work through the observability sections of the workshop lab guide - TBD
-
-
 
 
 PLEASE! When you are finished with the workshop, kindly run the 'teardown_workshop.sh' script to delete all the resources in AWS and the AppDynamics Controller that were created during the workshop by using the commands below:
 
+Example below:
 ```
 cd /home/ec2-user/environment/modernization_workshop
 
