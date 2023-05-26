@@ -15,7 +15,7 @@ If you are using a clean AWS Cloud9 instance (t3.large) then you can set the var
 
 ### Set Setup Variables First
 
-1. Navigate to the directory where you want the GitHub repository to be cloned to.
+1. **Required**: Navigate to the directory where you want the GitHub repository to be cloned to.
 
 2. **Required**: Clone this GitHub repository using the command below:
 
