@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export AWS_RETRY_MODE=standard
+export AWS_MAX_ATTEMPTS=100
+
 #set +x  # temporarily turn command display OFF.
 echo ""
 echo ""
