@@ -4,7 +4,7 @@
 
 Use the steps below to deploy AD-Financial as a self-contained docker-compose application.
 
-This application needs 8GB Memory and 70GB-80GB of Disk to run properly.  If you are using an AWS Cloud9 instance then it is assumed that you already have the following on the VM you will run the application on:
+This application needs 8GB Memory and 70GB-80GB of Disk to run properly.  If you are **not** using an AWS Cloud9 instance (t3.large) then it is assumed that you already have the following on the VM you will run the application on:
 
 - Java 1.8 or above
 - Docker-Compose (compatible with version 1.27.2)
