@@ -15,9 +15,13 @@ If you are using a clean AWS Cloud9 instance (t3.large) then you can set the var
 
 ### Set Setup Variables First
 
-1. **Required**: Navigate to the directory where you want the GitHub repository to be cloned to.
+1. **Required**: Navigate to the directory where you want the GitHub repository to be cloned.
 
-2. **Required**: Clone this GitHub repository using the command below:
+```
+cd /home/ec2-user/environment
+```
+
+2. **Required**: Clone this GitHub repository using the command below that clones the repo into the 'adfin-docker' sub-directory:
 
 ```
 git clone https://github.com/james201010/ad-financial-docker-compose.git adfin-docker
