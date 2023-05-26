@@ -89,6 +89,10 @@ cd /home/ec2-user/environment/adfin-docker
 
 1. Obtain the public IP Address or Host Name of the VM you deployed the application to and construct the URL to hit the home page, including the port seen below in the example:
 
+2. Login to the web site with any username and password
+
+3. Click on the four different accounts to explore the transactions seen in each account
+
 ```
 http://10.20.77.1:8080
 ```
