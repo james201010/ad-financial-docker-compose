@@ -5,7 +5,7 @@ teardownFilePath: "./scripts/state/workshop-teardown.yaml"
 setupHomeDirectory: "./"
 setupStateDirectory: "./scripts/state"
 setupStepsFileName: "appd_workshop_setup.txt"
-cloudProvider: "aws"
+cloudProvider: ""
 debugLogging: false
 
 

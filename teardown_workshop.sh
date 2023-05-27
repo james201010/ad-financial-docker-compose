@@ -52,8 +52,10 @@ if [ "$appd_controller_details_file_valid" == "true" ]; then
    java -DworkshopUtilsConf=./scripts/state/workshop-teardown.yaml -DworkshopAction=teardown -DcontrollerConf=${appd_controller_details_file_path} -DshowWorkshopBanner=false -jar ./AD-Workshop-Utils.jar
 else	
    java -DworkshopUtilsConf=./scripts/state/workshop-teardown.yaml -DworkshopAction=teardown -DshowWorkshopBanner=false -jar ./AD-Workshop-Utils.jar
-
 fi
+
+touch z_teardown_has_been_completed.txt
+
 echo ""
 echo ""
 echo ""
